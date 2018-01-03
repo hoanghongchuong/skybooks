@@ -99,16 +99,19 @@ class IndexController extends Controller
     {
         $banner_danhmuc = DB::table('lienket')->select()->where('status', 1)->where('com', 'chuyen-muc')->where('link', 'index')->get()->first();
         $banner_sidebar = DB::table('banner_content')->where('position', 5)->get();
-        $tintuc_moinhat = DB::table('news')->select()->where('status', 1)->where('com', 'tin-tuc')->orderBy('created_at', 'desc')->take(4)->get();
+        $tintuc_moinhat = DB::table('news')->select()->where('status', 1)->where('com', 'tin-tuc')->orderBy('created_at', 'desc')->take(20)->get();
         $com = 'index';
         $hot_news = DB::table('news')->where('status', 1)->where('noibat', 1)->where('com', 'tin-tuc')->orderBy('id', 'desc')->take(3)->get();
         $cate_pro = DB::table('product_categories')->where('status', 1)->where('parent_id', 0)->orderby('id', 'asc')->get();
         // $news_product = DB::table('products')->select()->where('status', 1)->where('com','san-pham')->orderBy('id', 'desc')->take(8)->get();
         $news_products = DB::table('products')->select()->where('status', 1)->where('com','san-pham')->orderBy('id', 'desc')->take(20)->get();
         $hot_product = DB::table('products')->where('status', 1)->where('noibat', 1)->where('com','san-pham')->orderBy('id', 'desc')->take(8)->get();
-        $productSale = DB::table('products')->where('status', 1)->where('spbc', 1)->where('com','san-pham')->orderBy('id', 'desc')->take(8)->get();
+        $productSalling = DB::table('products')->where('status', 1)->where('spbc', 1)->where('com','san-pham')->orderBy('id', 'desc')->get();
+        $productSale = DB::table('products')->where('status', 1)->where('xuthe', 1)->where('com','san-pham')->orderBy('id', 'desc')->get();
+        $productNoiBat = DB::table('products')->where('status', 1)->where('noibat', 1)->where('com','san-pham')->orderBy('id', 'desc')->get();
         $about = DB::table('about')->first();
         $cateHots = DB::table('product_categories')->where('noibat', 1)->where('com','san-pham')->get();
+        $feedback = DB::table('feedback')->get();
         $video = DB::table('video')->first();
         // Cấu hình SEO
         $setting = Cache::get('setting');
@@ -119,7 +122,7 @@ class IndexController extends Controller
         // End cấu hình SEO
         $img_share = asset('upload/hinhanh/' . $setting->photo);
 
-        return view('templates.index_tpl', compact('banner_danhmuc', 'com', 'khonggian_list', 'about', 'tintuc_moinhat', 'keyword', 'description', 'title', 'img_share', 'hot_news', 'news_products', 'hot_product', 'slider', 'banner_sidebar', 'cateHots', 'video', 'cate_pro', 'productSale'));
+        return view('templates.index_tpl', compact('banner_danhmuc', 'com', 'khonggian_list', 'about', 'tintuc_moinhat', 'keyword', 'description', 'title', 'img_share', 'hot_news', 'news_products', 'productSalling', 'slider', 'banner_sidebar', 'cateHots', 'productNoiBat', 'cate_pro', 'productSale','feedback'));
     }
 
     /**
@@ -129,16 +132,18 @@ class IndexController extends Controller
     public function getProduct(Request $req)
     {
         $cate_pro = DB::table('product_categories')->where('status', 1)->where('parent_id', 0)->orderby('id', 'asc')->get();
-        $products = DB::table('products')->select()->where('status', 1);
+        $products = DB::table('products')->select()->where('status', 1)->where('com','san-pham');
+        $productNew = DB::table('products')->select()->where('status',1)->orderBy('stt','desc')->take(12)->get();
         $appends = [];
         $selected = $req->sort;
         if ($req->sort) {
             if (isset($this->sortType[$req->sort])) {
+
                 $appends['sort'] = $req->sort;
                 $products = $products->orderBy($this->sortType[$req->sort]['order'][0], $this->sortType[$req->sort]['order'][1]);
             }
         }
-        $products = $products->paginate(9);
+        $products = $products->paginate(16);
         if (count($appends)) {
             $products = $products->appends($appends);
         }
@@ -153,10 +158,10 @@ class IndexController extends Controller
 
         // return view('templates.product_tpl', compact('product','banner_danhmuc','doitac','camnhan_khachhang','keyword','description','title','img_share'));
         view()->share(['sortType' => $this->sortType]);
-        return view('templates.product_tpl', compact('title', 'keyword', 'description', 'products', 'com', 'cate_pro', 'tintucs', 'selected'));
+        return view('templates.product_tpl', compact('title', 'keyword', 'description', 'products', 'com', 'cate_pro', 'tintucs', 'selected','productNew'));
     }
 
-    public function getProductList($id)
+    public function getProductList($id, Request $req)
     {
         //Tìm article thông qua mã id tương ứng
         //$cate_pro = DB::table('product_categories')->where('status',1)->orderby('id','desc')->get();
@@ -174,7 +179,22 @@ class IndexController extends Controller
                 }
             }
             $products = $product_cate->products;
-            // $product = DB::table('products')->select()->where('status',1)->whereIn('cate_id',$product_cate->id)->orderBy('stt','desc')->paginate(9);
+
+            $appends = [];
+            $selected = $req->sort;
+            if ($req->sort) {
+                if (isset($this->sortType[$req->sort])) {
+
+                    $appends['sort'] = $req->sort;
+                    $products = $products->orderBy($this->sortType[$req->sort]['order'][0], $this->sortType[$req->sort]['order'][1]);
+                }
+            }
+            $products = $products->paginate(16);
+            if (count($appends)) {
+                $products = $products->appends($appends);
+            }
+
+            $productNew = DB::table('products')->select()->where('status',1)->orderBy('stt','desc')->take(12)->get();
             $banner_danhmuc = DB::table('lienket')->select()->where('status', 1)->where('com', 'chuyen-muc')->where('link', 'san-pham')->get()->first();
             $doitac = DB::table('lienket')->select()->where('status', 1)->where('com', 'doi-tac')->orderby('stt', 'asc')->get();
             $tintucs = DB::table('news')->orderBy('id', 'desc')->take(3)->get();
@@ -195,8 +215,8 @@ class IndexController extends Controller
             $keyword = $product_cate->keyword;
             $description = $product_cate->description;
             $img_share = asset('upload/product/' . $product_cate->photo);
-
-            return view('templates.productlist_tpl', compact('products', 'product_cate', 'banner_danhmuc', 'doitac', 'keyword', 'description', 'title', 'img_share', 'cate_pro', 'tintucs', 'cateChilds', 'com', 'hotProducts', 'saleProduct'));
+            view()->share(['sortType' => $this->sortType]);
+            return view('templates.productlist_tpl', compact('products', 'product_cate', 'banner_danhmuc', 'doitac', 'keyword', 'description', 'title', 'img_share', 'cate_pro', 'tintucs', 'cateChilds', 'com', 'hotProducts', 'saleProduct','productNew','selected'));
         } else {
             return redirect()->route('getErrorNotFount');
         }
@@ -232,17 +252,8 @@ class IndexController extends Controller
             $description = $product_detail->description;
             $img_share = asset('upload/product/' . $product_detail->photo);
             // End cấu hình SEO
-            // get rating
-            $numbRate = DB::table('rating')->join('products', 'rating.product_id', '=', 'products.id')->select('rating.*', 'rating.rate as sumrate')->where('rating.product_id', $product_detail->id)->get();
-            $numbRates = count($numbRate);
-            $avgRates = DB::table('rating')->join('products', 'rating.product_id', '=', 'products.id')->where('rating.product_id', $product_detail->id)->avg('rate');
-            $avg = round($avgRates);
-            // dd($avg);
-            $rateGood = DB::table('rating')->join('products', 'rating.product_id', '=', 'products.id')->where('rating.product_id', $product_detail->id)->where('rating.rate', '>=', 3)->count('rate');
-            $tags = json_decode($product_detail->tags);
-            $fileRead = DB::table('docthu')->where('product_id',$product_detail->id)->first();
-            // dd($fileRead);
-            return view('templates.product_detail_tpl', compact('product_detail', 'banner_danhmuc', 'keyword', 'description', 'title', 'img_share', 'product_khac', 'album_hinh', 'cateProduct', 'productSameCate', 'tintucs', 'cate_pro', 'numbRates', 'avg', 'rateGood','tags','fileRead'));
+           $productSale = DB::table('products')->where('status',1)->where('xuthe',1)->take(12)->get();
+            return view('templates.product_detail_tpl', compact('product_detail', 'banner_danhmuc', 'keyword', 'description', 'title', 'img_share', 'product_khac', 'album_hinh', 'cateProduct', 'productSameCate', 'tintucs', 'cate_pro','productSale'));
         } else {
             return redirect()->route('getErrorNotFount');
         }
@@ -287,10 +298,10 @@ class IndexController extends Controller
         $description = "Tìm kiếm: " . $search;
         $img_share = '';
         // End cấu hình SEO
-
-        $products = DB::table('products')->select()->where('name', 'LIKE', '%' . $search . '%')->orderBy('id', 'DESC')->get();
+        $productNew = DB::table('products')->select()->where('status',1)->orderBy('stt','desc')->take(12)->get();
+        $products = DB::table('products')->select()->where('name', 'LIKE', '%' . $search . '%')->orderBy('id', 'DESC')->paginate(20);
         // dd($products);
-        return view('templates.search_tpl', compact('products', 'banner_danhmuc', 'keyword', 'description', 'title', 'img_share', 'search', 'cate_pro'));
+        return view('templates.search_tpl', compact('products', 'banner_danhmuc', 'keyword', 'description', 'title', 'img_share', 'search', 'cate_pro','productNew'));
     }
 
     public function getNews()
@@ -652,9 +663,9 @@ class IndexController extends Controller
                 'name' => $product->name,
                 'qty' => 1,
                 'price' => $product->price,
-                'options' => array('photo' => $product->photo, 'code' => $product->code)
+                'options' => array('photo' => $product->photo, 'code' => $product->code, 'alias' => $product->alias)
             ));
-            return 1;
+            echo count(Cart::Content());
         } catch (\Exception $e) {
             return 0;
         }
@@ -1016,7 +1027,11 @@ class IndexController extends Controller
             $result = $result->where('cate_id', $cateEBook);
         }
         $result = $result->orderBy('id','desc')->get();
-        return view('templates.searchEbook', compact('result'));
-        
+        return view('templates.searchEbook', compact('result'));    
+    }
+    public function saleBooks(){
+        $products = DB::table('products')->where('spbc',1)->paginate(20);
+        $productNew = DB::table('products')->select()->where('status',1)->orderBy('stt','desc')->take(12)->get();
+        return view('templates.saleBook', compact('products','productNew'));
     }
 }

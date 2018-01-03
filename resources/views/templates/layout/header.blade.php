@@ -13,7 +13,7 @@
                     <div class="header-search">
                         <form action="{{ route('search') }}" method="get">
                             <input type="text" name="txtSearch" placeholder="Tìm kiếm..." />
-                            <a href="{{ url('tim-kiem') }}"><i class="fa fa-search"></i></a>
+                            <a href="{{ url('tim-kiem') }}"><i class="fa fa-search" style="margin-top: 12px;"></i></a>
                         </form>
                     </div>
                 </div>
@@ -26,8 +26,8 @@
                     <div class="my-cart">
                         <ul>
                             <li><a href="{{url('gio-hang')}}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a>
-                                <span>2</span>
-                                <div class="mini-cart-sub">
+                                <span id='count_cart'>{{Cart::count()}}</span>
+                                <!-- <div class="mini-cart-sub">
                                     <div class="cart-product">
                                         <div class="single-cart">
                                             <div class="cart-img">
@@ -54,7 +54,7 @@
                                     <div class="cart-bottom">
                                         <a href="{{url('thanh-toan')}}">Thanh toán</a>
                                     </div>
-                                </div>
+                                </div> -->
                             </li>
                         </ul>
                     </div>
@@ -92,7 +92,7 @@
                         </nav>
                     </div>
                     <div class="safe-area">
-                        <a href="sale.html">Sách giảm giá</a>
+                        <a href="{{url('sach-giam-gia')}}">Sách giảm giá</a>
                     </div>
                 </div>
             </div>
@@ -107,44 +107,24 @@
                     <div class="mobile-menu">
                         <nav id="mobile-menu-active">
                             <ul>
-                                <li class="active"><a href="index.html">Trang chủ</a></li>
-                                <li><a href="product-details.html">Sách<i class="fa fa-angle-down"></i></a>
+                                <li class="active"><a href="{{url('')}}">Trang chủ</a></li>
+                                <li><a href="javascript:;">Sách<i class="fa fa-angle-down"></i></a>
                                     <div class="mega-menu">
+                                        @foreach($cateProducts as $cate)
                                         <span>
-                                            <a href="#" class="title">Sách thiếu nhi</a>
-                                            <a href="shop.html">Sách thiếu nhi 1</a>
-                                            <a href="shop.html">Sách thiếu nhi 2</a>
-                                            <a href="shop.html">Sách thiếu nhi 3</a>
-                                            <a href="shop.html">Sách thiếu nhi 4</a>
-                                            <a href="shop.html">Sách thiếu nhi 5</a>
+                                            <a href="#" class="title">{{$cate->name}}</a>
+                                            <?php $cateChilds = DB::table('product_categories')->where('parent_id', $cate->id)->get(); ?>
+                                            @foreach($cateChilds as $cateChild)
+                                            <a href="{{url('san-pham/'.$cateChild->alias)}}">{{$cateChild->name}}</a>
+                                            @endforeach
                                         </span>
-                                        <span>
-                                            <a href="#" class="title">Sách tâm lý</a>
-                                            <a href="shop.html">Sách tâm lý 1</a>
-                                            <a href="shop.html">Sách tâm lý 2</a>
-                                            <a href="shop.html">Sách tâm lý 3</a>
-                                            <a href="shop.html">Sách tâm lý 4</a>
-                                            <a href="shop.html">Sách tâm lý 5</a>
-                                        </span>
-                                        <span>
-                                            <a href="#" class="title">Sách giáo khoa</a>
-                                            <a href="shop.html">Toán</a>
-                                            <a href="shop.html">Lý</a>
-                                            <a href="shop.html">Hóa</a>
-                                            <a href="shop.html">Ngữ văn</a>
-                                            <a href="shop.html">Ngoại ngữ</a>
-                                        </span>
-                                        <span>
-                                            <a href="#" class="title">Truyện</a>
-                                            <a href="shop.html">Truyện thần thoại</a>
-                                            <a href="shop.html">Truyện cổ tích</a>
-                                            <a href="shop.html">Truyện tranh</a>
-                                        </span>
+                                        @endforeach
                                     </div>
                                 </li>
-                                <li><a href="about.html">Giới thiệu</a></li>
-                                <li><a href="blog.html">Tin tức</a></li>
-                                <li><a href="contact.html">Liên hệ</a></li>
+                                <li><a href="{{url('gioi-thieu')}}">Giới thiệu</a></li>
+                                <li><a href="{{url('tin-tuc')}}">Tin tức</a></li>
+                                <li><a href="{{url('lien-he')}}">Liên hệ</a></li>
+                                <li><a href="{{url('sach-giam-gia')}}">Sách giảm giá/a></li>
                             </ul>
                         </nav>
                     </div>

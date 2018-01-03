@@ -109,9 +109,9 @@
                   </div>
                   <div class="form-group"> 
                     @if($item->noibat>0)
-                      <a href="backend/product/edit?id={{$item->id}}&noibat={{ time() }}&type={{ @$_GET['type'] }}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Sắp phát hành</a>
+                      <a href="backend/product/edit?id={{$item->id}}&noibat={{ time() }}&type={{ @$_GET['type'] }}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> Sách đặc biệt</a>
                     @else
-                      <a href="backend/product/edit?id={{$item->id}}&noibat={{ time() }}&type={{ @$_GET['type'] }}" class="btn btn-danger btn-xs"><i class="fa fa-eye"></i> Sắp phát hành</a>
+                      <a href="backend/product/edit?id={{$item->id}}&noibat={{ time() }}&type={{ @$_GET['type'] }}" class="btn btn-danger btn-xs"><i class="fa fa-eye"></i> Sách đặc biệt</a>
                     @endif
                   </div>
                   @endif

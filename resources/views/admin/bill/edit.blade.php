@@ -65,13 +65,13 @@
 											<textarea name="" id="" cols="100" rows="5">{{$data->note}}</textarea>
 										</div>
 									</div>
-									<div class="form-group">
+									<!-- <div class="form-group">
 								      	<label for="txtAddress">Phương thức thanh toán</label>
 								      	<input type="text"  disabled value="<?php 
 								      		if($data->payment ==0)  echo "Thanh toán khi giao hàng";  
 								      		if($data->payment == 1) echo "Chuyển khoản qua ngân hàng"; 
 								      	?>"  class="form-control" />
-									</div>
+									</div> -->
 									<div class="form-group">
 								      	<label for="ten">Tình trạng đơn hàng</label>
 								      	<select name="status" class="form-control">
@@ -119,8 +119,8 @@
 					        </div><!-- /.box-body -->
 					        <div class="form-group">
 					        	<h4>Tổng đơn hàng: <b style="color: red; font-size: 22px"> {{ number_format($data->total) }} VNĐ</b></h4>
-					        	<h4>Trừ: <b style="color: red; font-size: 22px"> {{ number_format(($data->total) - ($data->money_pay)) }} VNĐ</b></h4>
-					        	<h4>Tổng tiền thanh toán: <b style="color: red; font-size: 22px"> {{ number_format($data->money_pay) }} VNĐ</b></h4>
+					        	<!-- <h4>Trừ: <b style="color: red; font-size: 22px"> {{ number_format(($data->total) - ($data->money_pay)) }} VNĐ</b></h4> -->
+					        	<h4>Tổng tiền thanh toán: <b style="color: red; font-size: 22px"> {{ number_format($data->total) }} VNĐ</b></h4>
 					        </div>
 	                    	<div class="clearfix"></div>
 	                	</div><!-- /.tab-pane -->

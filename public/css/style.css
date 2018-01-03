@@ -1296,7 +1296,7 @@ body {
 }
 .bestseller-content h2{
 	color: #f07c29;
-	font-size: 70px;
+	font-size: 50px;
 	font-weight: 700;
 	line-height: 1.1;
 	text-align: right;
@@ -1516,7 +1516,7 @@ body {
 /*  9  testimonial-area
 /*----------------------------------------*/
 .testimonial-area {
-  background: rgba(0, 0, 0, 0) url("img/banner/11.jpg") repeat scroll center center;
+  background: rgba(0, 0, 0, 0) url("../img/banner/11.jpg") repeat scroll center center;
 }
 .testimonial-img a{
 	border: 1px solid #fff;
@@ -3142,6 +3142,8 @@ a#scrollUp:hover{
 .pagination-area {
   border-top: 1px solid #ccc;
   padding: 15px 0;
+  width: 100%;
+  float: left;
 }
 .pagination-area .list-page p{
 	margin-bottom:0;
@@ -5305,4 +5307,8 @@ p.checkout-coupon input[type="submit"] {
 .blog-pagination li.active span{
 	background-color: #444444;
 	border:1px solid #444444;
+}
+#toast-container{
+	position: fixed;
+	top:40% !important;
 }

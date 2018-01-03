@@ -3,91 +3,183 @@
 <?php
     $setting = Cache::get('setting');
     $about = Cache::get('about');
+    $cateProducts = Cache::get('cateProducts');
 ?>
-<div class="breadcrumb-wrap">
+<div class="breadcrumbs-area mb-70">
     <div class="container">
-        <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{url('')}}" title="">Trang chủ</a></li>
-            <li class="breadcrumb-item"><a href="#" title="">Tìm kiếm</a></li>
-        </ul>
-    </div>
-</div>
-
-<div class="list-pro">
-    <div class="container">
-        
         <div class="row">
-            <aside class="col-md-12 col-lg-3">
-                @include('templates.filter')
-            </aside>
-            <div class="col-md-12 col-lg-9">
-                <h1 class="ndetail-tit"><a href="news-detail.html" title="">Kết quả tìm kiếm cho: "{{$search}}"</a></h1>
-                    
-                <div class="propage">
-                    @if(count($products) > 0)
-                    <div class="row flex-wrap no-gutters curent-book-row">
-                        @foreach($products as $product)
-                        <div class="col-md-6 col-lg-3">
-                            <!-- <div class="text-center text-uppercase item"> -->
-                                <div class="carousel_detail-item">
-                                    <a href="{{url('san-pham/'.$product->alias.'.html')}}" title=""><img src="{{asset('upload/product/'.$product->photo)}}" alt="{{$product->name}}" title="{{$product->name}}" class="img-responsive img "></a>
-                                    <button class="btn btn-buy">MUA NGAY</button>
-                                    <div class="text-center carousel_content">
-                                        <h3 class="text-center pro-name"><a href="{{url('san-pham/'.$product->alias.'.html')}}" title="">{{$product->name}}</a></h3>
-                                        <p class="text-center pro-price">{{number_format($product->price)}} <span>VNĐ</span></p>
-                                        <ul class="pro-rate">
-                                            <li><i class="fa fa-star-o"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                            <li><i class="fa fa-star-o"></i></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            <!-- </div> -->
-                        </div>
-                        @endforeach
-                    </div>
-                    @else <h2 style="font-size: 24px; font-weight: bold">Không có kết quả</h2>
-                    @endif
-                </div>
-            </div><!-- end col-10 -->
-        </div>
-    </div>
-</div>
-
-<div class="khach">
-    <img src="{{asset('public/images/khachbg.jpg')}}" title="" alt="">
-    <div class="container khach-con">
-        <div class="owl-carousel owl-theme carousel_khach">
-            <?php $feedback = DB::table('feedback')->get(); ?>
-            @foreach($feedback as $f)
-            <div class="item">
-                <div class="khach-wrap">
-                    <div class="text-center khach-img">
-                        <img class="mx-auto khach-item" src="{{asset('upload/hinhanh/'.$f->photo)}}" alt="" title="">
-                        <i class="fa fa-quote-left khach-decor"></i>
-                    </div>
-                    <ul class="text-center khach-rate">
-                        <li><i class="fa fa-star-o"></i></li>
-                        <li><i class="fa fa-star-o"></i></li>
-                        <li><i class="fa fa-star-o"></i></li>
-                        <li><i class="fa fa-star-o"></i></li>
-                        <li><i class="fa fa-star-o"></i></li>
+            <div class="col-lg-12">
+                <div class="breadcrumbs-menu">
+                    <ul>
+                        <li><a href="{{url('')}}">Trang chủ</a></li>
+                        <li><a href="#" class="active">Tìm kiếm</a></li>
                     </ul>
-                    <p class="text-center">{{$f->name}}</p>
-                    <blockquote class="font-weight-bold text-center">{!! $f->content !!}</blockquote>
                 </div>
             </div>
-            @endforeach
         </div>
     </div>
 </div>
 
-<div class="intro">
+<!-- shop-main-area-start -->
+<div class="shop-main-area mb-70">
     <div class="container">
-        <h1 class="text-uppercase btit">Nhà sách trực tuyến Sigmabooks</h1>
-        <p{!! $about->mota !!}</p>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                <div class="shop-left">
+                    <div class="section-title-5 mb-30">
+                        <h2>Tùy chọn</h2>
+                    </div>
+                    <div class="left-title mb-20">
+                        <h4>Danh mục</h4>
+                    </div>
+                    <div class="left-menu mb-30">
+                        <ul>
+                            @foreach($cateProducts as $cate)
+                            
+                            <li><a href="{{url('san-pham/'.$cate->alias)}}">{{$cate->name}}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    
+                    <div class="left-title mb-20">
+                        <h4>Sách ngẫu nhiên</h4>
+                    </div>
+                    <div class="random-area mb-30">
+                        <div class="product-active-2">
+                            @foreach($productNew->chunk(3) as $chunks)
+                            <div class="product-total-2">
+                                @foreach($chunks as $p)
+                                <div class="single-most-product bd mb-18">
+                                    <div class="most-product-img">
+                                        <a href="{{url('san-pham/'.$p->alias.'.html')}}"><img src="{{asset('upload/product/'.$p->photo)}}" alt="{{$p->name}}" /></a>
+                                    </div>
+                                    <div class="most-product-content">
+                                        <h4><a href="{{url('san-pham/'.$p->alias.'.html')}}">{{$p->name}}</a></h4>
+                                        <div class="product-price">
+                                            <ul>
+                                                <li>{{number_format($p->price)}}</li>
+                                                @if($p->price_old > $p->price)
+                                                <li class="old-price">{{$p->price_old}}</li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                                
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 shop">
+                
+                <div class="section-title-5 mb-30">
+                    <h1>Kết quả tìm kiếm từ khóa: {{$search}}</h1>
+                </div>
+                <div class="toolbar mb-30">
+                    <div class="shop-tab">
+                        <div class="tab-3">
+                            <ul>
+                                <li class="active"><a href="#th" data-toggle="tab"><i class="fa fa-th-large"></i>Dạng lưới</a></li>
+                                <li><a href="#list" data-toggle="tab"><i class="fa fa-bars"></i>Dạng danh sách</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                   
+                </div>
+                <!-- tab-area-start -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="th">
+                        <!-- single-product-start -->
+                        @foreach($products as $product)
+                        <div class="product-wrapper mb-40">
+                            <span class="sale">mới</span>
+                            <div class="product-img">
+                                <a href="{{ asset('san-pham/'.$product->alias.'.html') }}">
+                                    <img src="{{asset('upload/product/'.$product->photo)}}" alt="book" class="primary" />
+                                    <img src="{{asset('public/img/product/2.jpg')}}" alt="book" class="secondary" />
+                                </a>
+                            </div>
+                            <div class="product-details text-center">
+                                <h4><a href="{{ asset('san-pham/'.$product->alias.'.html') }}">{{$product->name}}</a></h4>
+                                <div class="product-price">
+                                    <ul>
+                                        <li>{{number_format($product->price)}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-link">
+                                <div class="product-button">
+                                    <a href="javascript:;" data-id="{{$product->id}}" class="btn-addcartx" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+                                </div>
+                                <div class="add-to-link">
+                                    <ul>
+                                        <li><a href="{{ asset('san-pham/'.$product->alias.'.html') }}" data-toggle="tooltip" title="Xem chi tiết"><i class="fa fa-eye"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>  
+                        </div>
+                        @endforeach
+                        
+                    </div>
+                    <div class="tab-pane fade" id="list">
+                    
+                        @foreach($products as $product)                     
+                        <div class="single-shop mb-30">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="product-wrapper-2">
+                                        <div class="product-img">
+                                            <a href="{{ asset('san-pham/'.$product->alias.'.html') }}">
+                                                <img src="{{asset('upload/product/'.$product->photo)}}" alt="book" class="primary" />
+                                            </a>
+                                        </div>  
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                    <div class="product-wrapper-content">
+                                        <div class="product-details">
+                                            <h4><a href="{{ asset('san-pham/'.$product->alias.'.html') }}">{{$product->name}}</a></h4>
+                                            <div class="product-price">
+                                                <ul>
+                                                    <li>{{number_format($product->price)}}</li>
+                                                    @if($product->price_old > $product->price)
+                                                    <li class="old-price">{{$product->price}}</li>
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                            <p>{!! $product->mota !!}</p>
+                                        </div>
+                                        <div class="product-link">
+                                            <div class="product-button">
+                                                <a href="javascript:;" class="btn-addcartx" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+                                            </div>
+                                            <div class="add-to-link">
+                                                <ul>
+                                                    <li><a href="{{ asset('san-pham/'.$product->alias.'.html') }}" data-toggle="tooltip" title="Xem chi tiết"><i class="fa fa-eye"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        
+                    </div>
+                </div>
+                
+                <div class="pagination-area mt-50">
+                    <div class="paginations pull-right">
+                        {{$products->links()}}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     </div>
 </div>
 @endsection

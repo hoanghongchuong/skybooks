@@ -49,7 +49,6 @@
                 <th>Mã hóa đơn</th>
                 <th>Họ tên</th>
                 <th>Tổng tiền thanh toán</th>
-                <th>Phương thức thanh toán</th>
                 <th>Ngày đặt hàng</th>
                 <th>Trạng thái</th>
                 <th class="text-center with_dieuhuong">Sửa</th>
@@ -63,13 +62,13 @@
                 <td class="text-center with_dieuhuong">{{$k+1}}</td>
                 <td>{{$item->code}}</td>
                 <td>{{$item->full_name}}</td>
-                <td>{{ number_format($item->money_pay)}}</td>
-                <td>
+                <td>{{ number_format($item->total)}}</td>
+                <!-- <td>
                   <?php 
                     if($item->payment == 0) echo"Thanh toán khi giao hàng";
                     if($item->payment == 1) echo"Chuyển khoản qua ngân hàng";
                   ?>
-                </td>
+                </td> -->
                 <td>{{ date('d/m/Y H:i:s', strtotime($item->created_at)) }}</td>
                 <td>
                   <?php

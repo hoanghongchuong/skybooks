@@ -62,26 +62,11 @@ class PostOrderController extends Controller
         $bill->note = Request::input('note');
         $bill->address = Request::input('address');
         $bill->code = str_random(8);
-        $bill->payment = (int)(Request::input('payment_method'));
-        $bill->province = Request::input('province');
-        $bill->district = Request::input('district');
+        // $bill->payment = (int)(Request::input('payment_method'));
+        
         $total = $this->getTotalPrice();
         $bill->total = $total;
-        if(isset(\Auth::user()->id)){
-            $bill->user_id = \Auth::user()->id;
-        }
-       
-        // $bill->user_id  = 
-        // $order['price'] = $this->getTotalPrice();
-        // if ($req->card_code) {
-        // 	$price = $this->checkCard($req);
-        // 	if (!$price) {
-        // 		return redirect()->back()->with('Mã giảm giá không đúng');
-        // 	}
-        // 	$bill->card_code = $req->card_code;
-        // 	$tongtien = $this->checkCard($req);
-        // 	$bill->total = ((Int)str_replace(',', '', $tongtien));
-        // }
+        
         $detail = [];
         foreach ($cart as $key) {
             $detail[] = [
@@ -96,77 +81,14 @@ class PostOrderController extends Controller
         $bill->detail = json_encode($detail);
         
         if ($total > 0) {
-            
-            $tt = $total;
-            $money_pay = $total;
-            try {
-                \DB::beginTransaction();
-            
-                if(isset(\Auth::user()->id)){
-
-                    $money = $this->getTotalUser();
-                    $torder = $money;
-                    // dd($torder);
-                    $saleOf = DB::table('saleof')->get(); 
-                    if($torder >= $saleOf[0]->total_value){
-                    $money_pay = $total*((100-$saleOf[0]->value_sale)/100);
-                    }
-                    elseif($torder >= $saleOf[1]->total_value && $total < $saleOf[0]->total_value){
-                        $money_pay = $total*((100-$saleOf[1]->value_sale)/100);
-
-                    }
-                    elseif($torder >= $saleOf[2]->total_value && $total < $saleOf[1]->total_value){
-                        $money_pay = $total*((100-$saleOf[2]->value_sale)/100);
-                    }
-                    else{
-                        $bill->money_pay = $money_pay;
-                    }
-                    // dd($money_pay);
-                   
-                    $torder = $money + $tt;
-                    \DB::table('users')->where('id', \Auth::user()->id)->update(['total_money' =>$torder ]);
-                }
-                
-                $bill->money_pay = $money_pay;
-                // dd($money_pay);
-
-                $bill->save();
-
-                \DB::commit();
-            } catch (Exception $e) {
-                \DB::rollback();
-                
-            }
+           $bill->save();
         } else {
             echo "<script type='text/javascript'>
 				alert('Giỏ hàng của bạn rỗng!');
 				window.location = '" . url('/') . "' 
 			</script>";
         }
-        try {
-        	
-            $data = [
-                'hoten' => Request::input('full_name'),
-                'diachi' => Request::input('address'),
-                'dienthoai' => Request::input('phone'),
-                'email' => Request::input('email'),
-                'total' => $money_pay	 
-                // 'noidung' => $request->get('noidung')
-            ];
-            Mail::send('templates.guidonhang_tpl', $data, function ($msg) {
-                $setting = Cache::get('setting');
-                $msg->from(Request::input('email'),  $setting->name);
-                $msg->to($setting->email, 'HoangChuong')->subject('Đơn đặt hàng');
-                // $msg->to(Request::input('email'), Request::input('full_name'))->subject('Đơn đặt hàng');
-            });
-            Mail::send('templates.sendCustom_tpl', $data, function ($msg) {
-                $setting = Cache::get('setting');
-                $msg->from($setting->email, $setting->name);
-                $msg->to(Request::input('email'), Request::input('full_name'))->subject('Đơn đặt hàng');
-            });
-        } catch (Exception $e) {
-            echo " khong gui dc email";
-        }
+        
         Cart::destroy();
         echo "<script type='text/javascript'>
 				alert('Cảm ơn bạn đã đặt hàng, chúng tôi sẽ liên hệ với bạn sớm nhất!');

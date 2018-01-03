@@ -50,6 +50,7 @@
     <!-- responsive css -->
     <link rel="stylesheet" href="{{asset('public/css/responsive.css')}}">
     <!-- modernizr css -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="{{asset('public/js/vendor/modernizr-2.8.3.min.js')}}"></script>
     <script src="{{asset('public/js/vendor/jquery-1.12.0.min.js')}}"></script>
     <script type="text/javascript">
@@ -96,7 +97,9 @@
         <script src="{{asset('public/js/waypoints.min.js')}}"></script>
         <!-- plugins js -->
         <script src="{{asset('public/js/plugins.js')}}"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <!-- main js -->
         <script src="{{asset('public/js/main.js')}}"></script>
+        <script src="{{asset('public/js/custom.js')}}"></script>
 </body>
 </html>

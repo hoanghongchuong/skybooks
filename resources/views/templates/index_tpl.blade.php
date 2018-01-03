@@ -696,109 +696,36 @@ $banner = DB::table('banner_content')->where('position',1)->get();
             <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                 <div class="bestseller-content">
                     <h1>Sách bán chạy</h1>
-                    <h2>J. k. <br />Rowling</h2>
-                    <p>Vestibulum porttitor iaculis gravida. Praesent vestibulum varius placerat. Cras tempor congue neque, id aliquam orci finibus sit amet. Fusce at facilisis arcu. Donec aliquet nulla id turpis semper, a bibendum metus vulputate. Suspendisse potenti. </p>
-                    <div class="social-author">
-                        <ul>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                        </ul>
-                    </div>
+                    <h2>{{$productSalling[0]->name}}</h2>
+                    <p>{!! $productSalling[0]->mota !!} </p>
+                    
                 </div>
                 <div class="banner-img-2 hidden-xs">
-                    <a href="#"><img src="img/banner/6.jpg" alt="banner" /></a>
+                    <a href="{{ url('san-pham/'.$productSalling[0]->alias.'.html') }}}"><img src="{{asset('upload/product/'.$productSalling[0]->photo)}}" alt="banner" /></a>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="bestseller-active">
+                    @foreach($productSalling->chunk(2) as $chunks)
                     <div class="bestseller-total">
+                        @foreach($chunks as $ps)
                         <div class="single-bestseller mb-25">
                             <div class="bestseller-img">
-                                <a href="#"><img src="img/product/13.jpg" alt="book" /></a>
+                                <a href="{{url('san-pham/'.$ps->alias.'.html')}}"><img src="{{asset('upload/product/'.$ps->photo)}}" alt="{{$ps->name}}" /></a>
                             </div>
                             <div class="bestseller-text text-center">
-                                <h3> <a href="product-details.html">Rival Messenger</a></h3>
+                                <h3> <a href="{{url('san-pham/'.$ps->alias.'.html')}}">{{$ps->name}}</a></h3>
                                 <div class="price">
                                     <ul>
-                                        <li><span class="mới-price">40.000</span></li>
-                                        <li><span class="old-price">45.000</span></li>
+                                        <li><span class="mới-price">{{number_format($ps->price)}}</span></li>
+                                        <li><span class="old-price">{{number_format($ps->price_old)}}</span></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="single-bestseller">
-                            <div class="bestseller-img">
-                                <a href="#"><img src="img/product/14.jpg" alt="book" /></a>
-                            </div>
-                            <div class="bestseller-text text-center">
-                                <h3> <a href="product-details.html">Impulse Duffle</a></h3>
-                                <div class="price">
-                                    <ul>
-                                        <li><span class="mới-price">70.000</span></li>
-                                        <li><span class="old-price">74.000</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                    <div class="bestseller-total">
-                        <div class="single-bestseller mb-25">
-                            <div class="bestseller-img">
-                                <a href="product-details.html"><img src="img/product/15.jpg" alt="book" /></a>
-                            </div>
-                            <div class="bestseller-text text-center">
-                                <h3> <a href="product-details.html">Voyage Yoga Bag</a></h3>
-                                <div class="price">
-                                    <ul>
-                                        <li><span class="mới-price">30.000</span></li>
-                                        <li><span class="old-price">32.000</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-bestseller">
-                            <div class="bestseller-img">
-                                <a href="product-details.html"><img src="img/product/16.jpg" alt="book" /></a>
-                            </div>
-                            <div class="bestseller-text text-center">
-                                <h3> <a href="product-details.html">Compete Track Tote</a></h3>
-                                <div class="price">
-                                    <ul>
-                                        <li><span class="mới-price">32.000</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bestseller-total">
-                        <div class="single-bestseller mb-25">
-                            <div class="bestseller-img">
-                                <a href="product-details.html"><img src="img/product/17.jpg" alt="book" /></a>
-                            </div>
-                            <div class="bestseller-text text-center">
-                                <h3> <a href="product-details.html">Fusion Backpack</a></h3>
-                                <div class="price">
-                                    <ul>
-                                        <li><span class="mới-price">59.000</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-bestseller">
-                            <div class="bestseller-img">
-                                <a href="product-details.html"><img src="img/product/14.jpg" alt="book" /></a>
-                            </div>
-                            <div class="bestseller-text text-center">
-                                <h3> <a href="product-details.html">Impulse Duffle</a></h3>
-                                <div class="price">
-                                    <ul>
-                                        <li><span class="mới-price">70.000</span></li>
-                                        <li><span class="old-price">74.000</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -840,7 +767,7 @@ $banner = DB::table('banner_content')->where('position',1)->get();
                             </div>
                             <div class="product-link">
                                 <div class="product-button">
-                                    <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+                                    <a href="javascript:;" data-id="{{$product->id}}" class="btn-addcartx" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
                                 </div>
                                 <div class="add-to-link">
                                     <ul>
@@ -865,12 +792,12 @@ $banner = DB::table('banner_content')->where('position',1)->get();
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="banner-img-2">
-                    <a href="#"><img src="img/banner/8.jpg" alt="banner" /></a>
+                    <a href="#"><img src="{{asset('public/img/banner/8.jpg')}}" alt="banner" /></a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="banner-img-2">
-                    <a href="#"><img src="img/banner/9.jpg" alt="banner" /></a>
+                    <a href="#"><img src="{{asset('public/img/banner/9.jpg')}}" alt="banner" /></a>
                 </div>
             </div>
         </div>
@@ -886,92 +813,28 @@ $banner = DB::table('banner_content')->where('position',1)->get();
                     <h3>Sách bán chạy</h3>
                 </div>
                 <div class="product-active-2">
+                    @foreach($productSalling->chunk(3) as $chunks)
                     <div class="product-total-2">
+                        @foreach($chunks as $item)
                         <div class="single-most-product bd mb-18">
                             <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/20.jpg" alt="book" /></a>
+                                <a href="{{url('san-pham/'.$item->alias.'.html')}}"><img src="{{asset('upload/product/'.$item->photo)}}" alt="{{$item->name}}" /></a>
                             </div>
                             <div class="most-product-content">
-                                <h4><a href="product-details.html">Endeavor Daytrip Backpack</a></h4>
+                                <h4><a href="{{url('san-pham/'.$item->alias.'.html')}}">{{$item->name}}</a></h4>
                                 <div class="product-price">
                                     <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">33.000</li>
+                                        <li>{{$item->price}}</li>
+                                        @if($item->price > $item->price_old)
+                                        <li class="old-price">{{$item->price}}</li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/21.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Savvy Shoulder Tote</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">35.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/22.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Compete Track Tote</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>35.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                    <div class="product-total-2">
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/23.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Voyage Yoga Bag</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">33.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/24.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Impulse Duffle</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>70.000</li>
-                                        <li class="old-price">74.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/22.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Fusion Backpack</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>59.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
+                    @endforeach 
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
@@ -979,92 +842,28 @@ $banner = DB::table('banner_content')->where('position',1)->get();
                     <h3>Sách đặc biệt </h3>
                 </div>
                 <div class="product-active-2">
+                    @foreach($productNoiBat->chunk(3) as $chunks)
                     <div class="product-total-2">
+                        @foreach($chunks as $item)
                         <div class="single-most-product bd mb-18">
                             <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/23.jpg" alt="book" /></a>
+                                <a href="{{url('san-pham/'.$item->alias.'.html')}}"><img src="{{asset('upload/product/'.$item->photo)}}" alt="{{$item->name}}" /></a>
                             </div>
                             <div class="most-product-content">
-                                <h4><a href="product-details.html">Voyage Yoga Bag</a></h4>
+                                <h4><a href="{{url('san-pham/'.$item->alias.'.html')}}">{{$item->name}}</a></h4>
                                 <div class="product-price">
                                     <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">33.000</li>
+                                        <li>{{$item->price}}</li>
+                                        @if($item->price > $item->price_old)
+                                        <li class="old-price">{{$item->price}}</li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="#"><img src="img/product/24.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Impulse Duffle</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>70.000</li>
-                                        <li class="old-price">74.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/26.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Driven Backpack1</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>40.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                    <div class="product-total-2">
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/20.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Endeavor Daytrip Backpack</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">33.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/21.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Savvy Shoulder Tote</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">35.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/22.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Compete Track Tote</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>35.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
+                     @endforeach
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 hidden-sm col-xs-12">
@@ -1072,98 +871,33 @@ $banner = DB::table('banner_content')->where('position',1)->get();
                     <h3>Sách giảm giá</h3>
                 </div>
                 <div class="product-active-2">
+                    @foreach($productSale->chunk(3) as $chuk)
                     <div class="product-total-2">
+                        @foreach($chuk as $items)
                         <div class="single-most-product bd mb-18">
                             <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/27.jpg" alt="book" /></a>
+                                 <a href="{{url('san-pham/'.$items->alias.'.html')}}"><img src="{{asset('upload/product/'.$items->photo)}}" alt="{{$items->name}}" /></a>
                             </div>
                             <div class="most-product-content">
-                                <h4><a href="product-details.html">Crown Summit Backpack</a></h4>
+                                <h4><a href="{{url('san-pham/'.$items->alias.'.html')}}">{{$items->name}}</a></h4>
                                 <div class="product-price">
                                     <ul>
-                                        <li>36.000</li>
-                                        <li class="old-price">38.000</li>
+                                        <li>{{$items->price}}</li>
+                                        @if($items->price > $items->price_old)
+                                        <li class="old-price">{{$items->price}}</li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/28.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Driven Backpack</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>34.000</li>
-                                        <li class="old-price">36.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product">
-                            <div class="most-product-img">
-                                <a href="#"><img src="img/product/29.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Endeavor Daytrip Backpack</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">33.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                    <div class="product-total-2">
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="#"><img src="img/product/23.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Voyage Yoga Bag</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>30.000</li>
-                                        <li class="old-price">33.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product bd mb-18">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/24.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Impulse Duffle</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>70.000</li>
-                                        <li class="old-price">74.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-most-product">
-                            <div class="most-product-img">
-                                <a href="product-details.html"><img src="img/product/22.jpg" alt="book" /></a>
-                            </div>
-                            <div class="most-product-content">
-                                <h4><a href="product-details.html">Fusion Backpack</a></h4>
-                                <div class="product-price">
-                                    <ul>
-                                        <li>59.000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
+                    @endforeach
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                 <div class="">
-                    <a href="#" title=""><img src="img/banner/31.jpg" alt="banner"></a>
+                    <a href="#" title=""><img src="{{asset('public/img/banner/31.jpg')}}" alt="banner"></a>
                 </div>
             </div>
         </div>
@@ -1175,28 +909,19 @@ $banner = DB::table('banner_content')->where('position',1)->get();
     <div class="container">
         <div class="row">
             <div class="testimonial-active">
+                @foreach($feedback as $fb)
                 <div class="col-lg-12">
                     <div class="single-testimonial text-center">
                         <div class="testimonial-img">
-                            <a href="#"><i class="fa fa-quote-right"></i></a>
+                            <a href="#"><i class="fa fa-quote-right" style="margin-top: 25px;"></i></a>
                         </div>
                         <div class="testimonial-text">
-                            <p>I'm so happy with all of the themes, great support, could not wish for more. These people are <br /> geniuses ! Kudo's from the Netherlands !</p>
-                            <a href="#"><span>Sandy Wilcke </span>/khách hàng</a>
+                            <p>{!! $fb->content !!}</p>
+                            <a href="#"><span>{{$fb->name}} </span>/ khách hàng</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="single-testimonial text-center">
-                        <div class="testimonial-img">
-                            <a href="#"><i class="fa fa-quote-right"></i></a>
-                        </div>
-                        <div class="testimonial-text">
-                            <p>All Perfect !! I have three sites with magento , this theme is the best !! Excellent support ,<br /> advice theme installation package , sorry for English, are Italian but I had no problem !! Thank you !</p>
-                            <a href="#"><span>Sandy Wilcke </span>/khách hàng</a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -1212,50 +937,19 @@ $banner = DB::table('banner_content')->where('position',1)->get();
                 </div>
             </div>
             <div class="post-active text-center">
+                @foreach($tintuc_moinhat as $news)
                 <div class="col-lg-12">
                     <div class="single-post">
                         <div class="post-img">
-                            <a href="blog-details.html"><img src="img/post/1.jpg" alt="post" /></a>
+                            <a href="{{url('tin-tuc/'.$news->alias.'.html')}}"><img src="{{asset('upload/news/'.$news->photo)}}" alt="post" /></a>
                         </div>
                         <div class="post-content">
-                            <h3><a href="blog-details.html">The History and the Hype</a></h3>
-                            <p>Discover five of our favourite dresses from our mới collection that are destined to be worn and loved immediately.</p>
+                            <h3><a href="blog-details.html">{{$news->name}}</a></h3>
+                            <p>{!! $news->mota !!}</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="single-post">
-                        <div class="post-img">
-                            <a href="blog-details.html"><img src="img/post/2.jpg" alt="post" /></a>
-                        </div>
-                        <div class="post-content">
-                            <h3><a href="blog-details.html">Answers to your Questions</a></h3>
-                            <p>Discover five of our favourite dresses from our mới collection that are destined to be worn and loved immediately.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="single-post">
-                        <div class="post-img">
-                            <a href="blog-details.html"><img src="img/post/3.jpg" alt="post" /></a>
-                        </div>
-                        <div class="post-content">
-                            <h3><a href="blog-details.html">What is Bootstrap?</a></h3>
-                            <p>Discover five of our favourite dresses from our mới collection that are destined to be worn and loved immediately.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="single-post">
-                        <div class="post-img">
-                            <a href="blog-details.html"><img src="img/post/4.jpg" alt="post" /></a>
-                        </div>
-                        <div class="post-content">
-                            <h3><a href="blog-details.html">Etiam eros massa</a></h3>
-                            <p>Discover five of our favourite dresses from our mới collection that are destined to be worn and loved immediately.</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
