@@ -66,8 +66,8 @@
                     <div class="menu-area">
                         <nav>
                             <ul>
-                                <li class="@if($com == 'index') active @endif"><a href="{{url('')}}">Trang chủ</a></li>
-                                <li><a href="#">Sách<i class="fa fa-angle-down"></i></a>
+                                <li class="@if(@$com == 'index') active @endif"><a href="{{url('')}}">Trang chủ</a></li>
+                                <li class="@if(@$com == 'san-pham') active @endif"><a href="#">Sách<i class="fa fa-angle-down"></i></a>
                                     <div class="mega-menu">
                                         @foreach($cateProducts as $cate)
                                         <span>
@@ -80,9 +80,9 @@
                                         @endforeach
                                     </div>
                                 </li>
-                                <li class="@if($com == 'gioi-thieu') active @endif"><a href="{{url('gioi-thieu')}}">Giới thiệu</a></li>
-                                <li class="@if($com =='tin-tuc') active @endif"><a href="{{url('tin-tuc')}}">Tin tức</a></li>
-                                <li class="@if($com =='lien-he') active @endif"><a href="{{ url('lien-he') }}">Liên hệ</a></li>
+                                <li class="@if(@$com == 'gioi-thieu') active @endif"><a href="{{url('gioi-thieu')}}">Giới thiệu</a></li>
+                                <li class="@if(@$com =='tin-tuc') active @endif"><a href="{{url('tin-tuc')}}">Tin tức</a></li>
+                                <li class="@if(@$com =='lien-he') active @endif"><a href="{{ url('lien-he') }}">Liên hệ</a></li>
                             </ul>
                         </nav>
                     </div>

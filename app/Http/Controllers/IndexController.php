@@ -225,6 +225,7 @@ class IndexController extends Controller
     }
     public function getProductDetail($id)
     {
+        $com = 'san-pham';
         $cate_pro = DB::table('product_categories')->where('status', 1)->where('parent_id', 0)->orderby('id', 'asc')->get();
         $product_detail = DB::table('products')->select()->where('status', 1)->where('alias', $id)->get()->first();
         if (!empty($product_detail)) {
@@ -247,7 +248,7 @@ class IndexController extends Controller
             $img_share = asset('upload/product/' . $product_detail->photo);
             // End cấu hình SEO
            $productSale = DB::table('products')->where('status',1)->where('xuthe',1)->take(12)->get();
-            return view('templates.product_detail_tpl', compact('product_detail', 'banner_danhmuc', 'keyword', 'description', 'title', 'img_share', 'product_khac', 'album_hinh', 'cateProduct', 'productSameCate', 'tintucs', 'cate_pro','productSale'));
+            return view('templates.product_detail_tpl', compact('product_detail', 'banner_danhmuc', 'keyword', 'description', 'title', 'img_share', 'product_khac', 'album_hinh', 'cateProduct', 'productSameCate', 'tintucs', 'cate_pro','productSale','com'));
         } else {
             return redirect()->route('getErrorNotFount');
         }
