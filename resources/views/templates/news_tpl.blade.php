@@ -38,7 +38,6 @@
                             ?>
                             <li><a href="{{ url('tin-tuc/'.$cate->alias) }}">{{$cate->name}} ({{$numberNews}})</a></li>
                             @endforeach
-                            
                         </ul>
                     </div>
                 </div>

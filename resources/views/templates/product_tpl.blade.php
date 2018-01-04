@@ -43,15 +43,7 @@
                     <div class="left-title mb-20">
                         <h4>Giá</h4>
                     </div>
-                    <div class="left-menu mb-30">
-                        <ul>
-                            <li><a href="#">0-20.000<span>(1)</span></a></li>
-                            <li><a href="#">20.00-50.000<span>(11)</span></a></li>
-                            <li><a href="#">50.00-100.000<span>(2)</span></a></li>
-                            <li><a href="#">100.000-150.000<span>(3)</span></a></li>
-                            <li><a href="#">150.000-and above<span>(1)</span></a></li>
-                        </ul>
-                    </div>
+                    
                     <div class="left-title mb-20">
                         <h4>Sách ngẫu nhiên</h4>
                     </div>

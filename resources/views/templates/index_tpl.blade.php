@@ -9,50 +9,20 @@ $banner = DB::table('banner_content')->where('position',1)->get();
 <div class="banner-area ptb-30">
     <div class="container">
         <div class="row">
+            <?php $slogans = DB::table('slogan')->get(); ?>
+            @foreach($slogans as $slogan)
             <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                 <div class="single-banner">
                     <div class="banner-img">
-                        <a href="#"><img src="{{asset('public/img/banner/1.png')}}" alt="banner" /></a>
+                        <a href="#"><img src="{{asset('upload/hinhanh/'.$slogan->photo)}}" alt="banner" /></a>
                     </div>
                     <div class="banner-text">
-                        <h4>Vận chuyển miễn phí</h4>
-                        <p>Tất cả đơn hàng trên 500.000</p>
+                        <h4>{{$slogan->name}}</h4>
+                        <p>{!!$slogan->content!!}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                <div class="single-banner">
-                    <div class="banner-img">
-                        <a href="#"><img src="{{asset('public/img/banner/2.png')}}" alt="banner" /></a>
-                    </div>
-                    <div class="banner-text">
-                        <h4>Cam kết hoàn tiền</h4>
-                        <p>100% hoàn trả tiền</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 hidden-sm col-xs-12">
-                <div class="single-banner">
-                    <div class="banner-img">
-                        <a href="#"><img src="{{asset('public/img/banner/3.png')}}" alt="banner" /></a>
-                    </div>
-                    <div class="banner-text">
-                        <h4>Thanh toán qua thẻ</h4>
-                        <p>Lorem ipsum dolor amet consectetur</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                <div class="single-banner">
-                    <div class="banner-img">
-                        <a href="#"><img src="{{asset('public/img/banner/4.png')}}" alt="banner" /></a>
-                    </div>
-                    <div class="banner-text">
-                        <h4>Hỗ trợ</h4>
-                        <p>Điện thoại: <a href="tel:0123456789" title="">+ 0123.4567.89</a></p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </div>
@@ -71,9 +41,9 @@ $banner = DB::table('banner_content')->where('position',1)->get();
                 <!-- tab-menu-start -->
                 <div class="tab-menu mb-40 text-center">
                     <ul>
-                        <li class="active"><a href="#Audiobooks" data-toggle="tab">Sách nói </a></li>
-                        <li><a href="#books"  data-toggle="tab">Sách trẻ em</a></li>
-                        <li><a href="#bussiness" data-toggle="tab">Sách kinh doanh và tiền </a></li>
+                        @foreach($cateProducts as $k => $cate)
+                        <li class="@if($k == 0)active @endif"><a href="#tab{{$k}}" data-toggle="tab">{{$cate->name}} </a></li>
+                        @endforeach
                     </ul>
                 </div>
                 <!-- tab-menu-end -->
@@ -81,591 +51,59 @@ $banner = DB::table('banner_content')->where('position',1)->get();
         </div>
         <!-- tab-area-start -->
         <div class="tab-content">
-            <div class="tab-pane active" id="Audiobooks">
+            @foreach($cateProducts as $k => $cate)
+            <?php 
+                $cateChild = DB::table('product_categories')->where('parent_id', $cate->id)->get();
+            ?>
+            <div class="tab-pane @if($k == 0)active @endif" id="tab{{$k}}">
                 <div class="row">
                     <div class="tab-active">
+                        @foreach($cateChild as $item)
+                        <?php $ids = array();
+                            $ids[] = $item->id;
+                            $products = DB::table('products')->whereIn('cate_id', $ids)->get();
+                            
+                         ?>
+                        @foreach($products as $item) 
                         <div class="col-lg-12">
+                           
                             <!-- single-product-start -->
                             <div class="product-wrapper">
                                 <span class="sale">mới</span>
                                 <div class="product-img">
                                     <a href="product-details.html" title="">
-                                        <img src="{asset('public/img/product/1.jpg')}}" alt="book" class="primary" />
-                                        <img src="{asset('public/img/product/2.jpg')}}" alt="book" class="secondary" />
+                                        <img src="{{asset('upload/product/'.$item->photo)}}" alt="book" class="primary" />
+                                        <!-- <img src="{asset('public/img/product/2.jpg')}}" alt="book" class="secondary" /> -->
                                     </a>
                                 </div>
+                                
                                 <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Joust Duffle Bag</a></h4>
+                                    <h4><a href="product-details.html">{{$item->name}}</a></h4>
                                     <div class="product-price">
                                         <ul>
-                                            <li>60.000</li>
+                                            <li>{{number_format($item->price)}}</li>
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="product-link">
                                     <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
+                                        <a href="javascript:;" data-id="{{$item->id}}" class="btn-addcartx" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
                                     </div>
                                     <div class="add-to-link">
                                         <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
+                                            <li><a href="{{url('san-pham/'.$item->alias.'.html')}}" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
                                 </div>  
                             </div>
                             <!-- single-product-end -->
                         </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="{asset('public/img/product/3.jpg')}}" alt="book" class="primary" />
-                                        <img src="{asset('public/img/product/4.jpg')}}" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="#">Chaz Kangeroo Hoodie</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>52.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="{asset('public/img/product/5.jpg')}}" alt="book" class="primary" />
-                                        <img src="{asset('public/img/product/6.jpg')}}" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Set of Sprite Yoga Straps</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>$34.00</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="{{asset('public/img/product/7.jpg')}}" alt="book" class="primary" />
-                                        <img src="{{asset('public/img/product/8.jpg')}}" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Strive Shoulder Pack</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>30.000</li>
-                                            <li class="old-price">32.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="{{asset('public/img/product/9.jpg')}}" alt="book" class="primary" />
-                                        <img src="img/product/10.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Wayfarer Messenger Bag</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>35.000</li>
-                                            <li class="old-price">40.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/11.jpg" alt="book" class="primary" />
-                                        <img src="img/product/12.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Impulse Duffle</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>74.000</li>
-                                            <li class="old-price">78.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
+                        @endforeach
+                        @endforeach
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade" id="books">
-                <div class="row">
-                    <div class="tab-active">
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/5.jpg" alt="book" class="primary" />
-                                        <img src="img/product/6.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Set of Sprite Yoga Straps</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>34.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/7.jpg" alt="book" class="primary" />
-                                        <img src="img/product/8.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Strive Shoulder Pack</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>30.000</li>
-                                            <li class="old-price">32.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/1.jpg" alt="book" class="primary" />
-                                        <img src="img/product/2.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Joust Duffle Bag</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>60.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/3.jpg" alt="book" class="primary" />
-                                        <img src="img/product/4.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Chaz Kangeroo Hoodie</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>52.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/9.jpg" alt="book" class="primary" />
-                                        <img src="img/product/10.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Wayfarer Messenger Bag</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>35.000</li>
-                                            <li class="old-price">40.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/11.jpg" alt="book" class="primary" />
-                                        <img src="img/product/12.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Impulse Duffle</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>74.000</li>
-                                            <li class="old-price">78.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="bussiness">
-                <div class="row">
-                    <div class="tab-active">
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/9.jpg" alt="book" class="primary" />
-                                        <img src="img/product/10.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Wayfarer Messenger Bag</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>35.000</li>
-                                            <li class="old-price">40.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/11.jpg" alt="book" class="primary" />
-                                        <img src="img/product/12.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Impulse Duffle</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>74.000</li>
-                                            <li class="old-price">78.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/1.jpg" alt="book" class="primary" />
-                                        <img src="img/product/2.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Joust Duffle Bag</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>60.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="#">
-                                        <img src="img/product/3.jpg" alt="book" class="primary" />
-                                        <img src="img/product/4.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Chaz Kangeroo Hoodie</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>52.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/5.jpg" alt="book" class="primary" />
-                                        <img src="img/product/6.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="#">Set of Sprite Yoga Straps</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>34.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <span class="sale">mới</span>
-                                <div class="product-img">
-                                    <a href="product-details.html">
-                                        <img src="img/product/7.jpg" alt="book" class="primary" />
-                                        <img src="img/product/8.jpg" alt="book" class="secondary" />
-                                    </a>
-                                </div>
-                                <div class="product-details text-center">
-                                    <h4><a href="product-details.html">Strive Shoulder Pack</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>30.000</li>
-                                            <li class="old-price">32.000</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Thêm vào giỏ hàng"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ hàng</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" data-toggle="tooltip" title="Chi tiết sản phẩm"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>  
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+             @endforeach
         </div>
         <!-- tab-area-end -->
     </div>
@@ -677,11 +115,12 @@ $banner = DB::table('banner_content')->where('position',1)->get();
         <div class="row">
             <div class="col-lg-12">
                 <div class="banner-img-2">
-                    <a href="#"><img src="{{asset('public/img/banner/5.jpg')}}" alt="banner" /></a>
-                    <div class="banner-text">
+                    <?php $banner = DB::table('banner_content')->where('position', 1)->get(); ?>
+                    <a href="{{$banner[0]->link}}"><img src="{{asset('upload/banner/'.$banner[0]->image)}}" alt="banner" /></a>
+                    <!-- <div class="banner-text">
                         <h3>G. Meyer Books & Spiritual Traveler Press</h3>
                         <h2>Giảm trên 30%</h2>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -792,12 +231,12 @@ $banner = DB::table('banner_content')->where('position',1)->get();
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="banner-img-2">
-                    <a href="#"><img src="{{asset('public/img/banner/8.jpg')}}" alt="banner" /></a>
+                    <a href="{{$banner[1]->link}}"><img src="{{asset('upload/banner/'.$banner[1]->image)}}" alt="banner" /></a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="banner-img-2">
-                    <a href="#"><img src="{{asset('public/img/banner/9.jpg')}}" alt="banner" /></a>
+                    <a href="{{$banner[2]->link}}"><img src="{{asset('upload/banner/'.$banner[2]->image)}}" alt="banner" /></a>
                 </div>
             </div>
         </div>
@@ -897,7 +336,7 @@ $banner = DB::table('banner_content')->where('position',1)->get();
             </div>
             <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                 <div class="">
-                    <a href="#" title=""><img src="{{asset('public/img/banner/31.jpg')}}" alt="banner"></a>
+                    <a href="{{$banner[3]->link}}"><img src="{{asset('upload/banner/'.$banner[3]->image)}}" alt="banner" /></a>
                 </div>
             </div>
         </div>

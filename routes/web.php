@@ -23,9 +23,9 @@ Route::get('tin-tuc/{id}.html',['as'=>'getNewsDetail', 'uses'=>'IndexController@
 Route::get('tin-tuc/{alias}',['as'=>'getListNews', 'uses'=>'IndexController@getListNews']);
 Route::get('tuyen-dung',['as'=>'getNews', 'uses'=>'IndexController@getTuyenDung']);
 Route::get('tuyen-dung/{id}.html',['as'=>'getNewsDetail', 'uses'=>'IndexController@getNewsTuyenDungDetail']);
-Route::get('filter','IndexController@filter')->name('filter');
 
-Route::post('rating','IndexController@rating')->name('rating');
+
+// Route::post('rating','IndexController@rating')->name('rating');
 
 Route::get('tim-kiem',['as'=>'search', 'uses'=>'IndexController@search']);
 Route::post('newsletter',['as'=>'postNewsletter', 'uses'=>'IndexController@postNewsletter']);
@@ -307,7 +307,14 @@ Route::group(['middleware' =>'authen', 'prefix' => 'backend'], function(){
 		Route::get('delete/{id}',['as' => 'admin.delete.recruitment', 'uses'=>'Admin\RecruitmentController@deleteRecruitment']);
 
 	});
-
+	Route::group(['prefix'=>'slogan'], function(){
+		Route::get('/',['as'=>'admin.slogan.index','uses'=>'Admin\SloganController@index']);
+		Route::get('create',['as'=>'admin.slogan.create','uses'=>'Admin\SloganController@getCreate']);
+		Route::post('create',['as'=>'admin.slogan.postCreate','uses'=>'Admin\SloganController@postCreate']);
+		Route::get('edit/{id}',['as'=>'admin.slogan.edit', 'uses'=>'Admin\SloganController@getEdit']);
+		Route::post('edit/{id}',['as'=>'admin.slogan.postEdit', 'uses'=>'Admin\SloganController@postEdit']);
+		Route::get('delete/{id}',['as'=>'admin.slogan.delete', 'uses' => 'Admin\SloganController@delete']);
+	});
 	Route::group(['prefix' => 'newsletter'], function(){
 		Route::get('/',['as'=>'admin.newsletter.index','uses'=>'Admin\NewsLetterController@getList']);
 		Route::get('add',['as'=>'admin.newsletter.getAdd','uses'=>'Admin\NewsLetterController@getAdd']);

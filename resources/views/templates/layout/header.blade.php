@@ -27,34 +27,29 @@
                         <ul>
                             <li><a href="{{url('gio-hang')}}"><i class="fa fa-shopping-cart"></i>Giỏ hàng</a>
                                 <span id='count_cart'>{{Cart::count()}}</span>
-                                <!-- <div class="mini-cart-sub">
+
+                                <div class="mini-cart-sub">
+                               
                                     <div class="cart-product">
+                                        @foreach(Cart::content() as $cart)
                                         <div class="single-cart">
                                             <div class="cart-img">
-                                                <a href="product-details.html"><img src="img/product/1.jpg" alt="book" /></a>
+                                                <a href="{{url('san-pham/'.$cart->options->alias.'.html')}}"><img src="{{asset('upload/product/'.$cart->options->photo)}}" alt="book" /></a>
                                             </div>
                                             <div class="cart-info">
-                                                <h5><a href="product-details.html">Joust Duffle Bag</a></h5>
-                                                <p>1 x 60.000</p>
+                                                <h5><a href="{{url('san-pham/'.$cart->options->alias.'.html')}}">{{$cart->name}}</a></h5>
+                                                <p>{{$cart->qty}} x {{number_format($cart->price)}}</p>
                                             </div>
                                         </div>
-                                        <div class="single-cart">
-                                            <div class="cart-img">
-                                                <a href="product-details.html"><img src="img/product/3.jpg" alt="book" /></a>
-                                            </div>
-                                            <div class="cart-info">
-                                                <h5><a href="product-details.html">Chaz Kangeroo Hoodie</a></h5>
-                                                <p>1 x 52.000</p>
-                                            </div>
-                                        </div>
+                                        @endforeach
                                     </div>
                                     <div class="cart-totals">
-                                        <h5>Tổng tiền <span>120.000</span></h5>
+                                        <h5>Tổng tiền <span>{{Cart::subtotal()}}</span></h5>
                                     </div>
                                     <div class="cart-bottom">
                                         <a href="{{url('thanh-toan')}}">Thanh toán</a>
                                     </div>
-                                </div> -->
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -71,7 +66,7 @@
                     <div class="menu-area">
                         <nav>
                             <ul>
-                                <li class="active"><a href="{{url('')}}">Trang chủ</a></li>
+                                <li class="@if($com == 'index') active @endif"><a href="{{url('')}}">Trang chủ</a></li>
                                 <li><a href="#">Sách<i class="fa fa-angle-down"></i></a>
                                     <div class="mega-menu">
                                         @foreach($cateProducts as $cate)
@@ -85,9 +80,9 @@
                                         @endforeach
                                     </div>
                                 </li>
-                                <li><a href="{{url('gioi-thieu')}}">Giới thiệu</a></li>
-                                <li><a href="{{url('tin-tuc')}}">Tin tức</a></li>
-                                <li><a href="{{ url('lien-he') }}">Liên hệ</a></li>
+                                <li class="@if($com == 'gioi-thieu') active @endif"><a href="{{url('gioi-thieu')}}">Giới thiệu</a></li>
+                                <li class="@if($com =='tin-tuc') active @endif"><a href="{{url('tin-tuc')}}">Tin tức</a></li>
+                                <li class="@if($com =='lien-he') active @endif"><a href="{{ url('lien-he') }}">Liên hệ</a></li>
                             </ul>
                         </nav>
                     </div>

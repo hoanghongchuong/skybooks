@@ -109,11 +109,7 @@
             <i class="fa fa-th"></i> <span>Giới thiệu chia sẻ</span>
           </a>
         </li> -->
-        <!-- <li>
-          <a href="backend/about/edit?type=slogan">
-            <i class="fa fa-th"></i> <span>Quản lý slogan</span>
-          </a>
-        </li> -->
+       
         <!-- <li>
           <a href="backend/about/edit?type=lien-he">
             <i class="fa fa-th"></i> <span>Quản lý liên hệ</span>
@@ -133,6 +129,7 @@
         <li><a href="backend/nhaxuatban"><i class="fa fa-circle-o"></i> <span>Quản lý nhà xuất bản</span></a></li> -->
         <li><a href="backend/partner"><i class="fa fa-circle-o"></i> <span>Thành viên của chúng tôi</span></a></li>
         <li><a href="backend/feedback"><i class="fa fa-gear" aria-hidden="true"></i> <span>Ý kiến khách hàng</span></a></li>
+        <li><a href="backend/slogan"><i class="fa fa-gear" aria-hidden="true"></i> <span>Quản lý slogan</span></a></li>
         <!-- <li><a href="backend/newsletter?type=newsletter"><i class="fa fa-circle-o"></i> <span>Đăng ký nhận tin</span></a></li> -->
         <!-- <li><a href="backend/lienket?type=gioi-thieu"><i class="fa fa-circle-o"></i> <span>Hình ảnh giới thiệu</span></a></li> -->
         <!-- <li><a href="backend/lienket?type=tieu-chi"><i class="fa fa-circle-o"></i> <span>Tiêu chí hội viên</span></a></li> -->

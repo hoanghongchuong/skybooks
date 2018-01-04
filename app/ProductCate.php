@@ -15,7 +15,6 @@ class ProductCate extends Model {
         return \App\Products::whereIn('cate_id', $categoryIdArray)->where('com','san-pham');
     }
 
-
     protected function getChildCategories($categoryArray = [])
     {
     	$childIdArray = ProductCate::select('id')->whereIn('parent_id', $categoryArray)->whereNotIn('id', $categoryArray)->get()->pluck('id')->toArray();

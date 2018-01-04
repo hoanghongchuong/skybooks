@@ -19,9 +19,7 @@
         </div>
     </div>
 </div>
-<!-- breadcrumbs-area-end -->
-<!-- product-main-area-start -->
-<div class="product-main-area mb-70">
+<div class="product-main-area mb-70 product-details">
     <div class="container">
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
@@ -31,18 +29,15 @@
                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                             <div class="flexslider">
                                 <ul class="slides">
-                                    <li data-thumb="{{asset('public/img/thum-2/1.jpg')}}">
-                                      <img src="{{asset('public/img/flex/1.jpg')}}" alt="woman" />
-                                    </li>
-                                    <li data-thumb="{{asset('public/img/thum-2/5.jpg')}}">
-                                      <img src="{{asset('public/img/flex/2.jpg')}}" alt="woman" />
-                                    </li>
-                                    <li data-thumb="{{asset('public/img/thum-2/2.jpg')}}">
-                                      <img src="{{asset('public/img/flex/3.jpg')}}" alt="woman" />
-                                    </li>
-                                    <li data-thumb="{{asset('public/img/thum-2/5.jpg')}}">
-                                      <img src="{{asset('public/img/flex/3.jpg')}}" alt="woman" />
-                                    </li>
+                                    @if(count($album_hinh) > 0)
+                                        @foreach($album_hinh as $a)
+                                        <li data-thumb="{{asset('upload/hasp/'.$a->photo)}}">
+                                          <img src="{{asset('upload/hasp/'.$a->photo)}}" alt="{{$product_detail->name}}" />
+                                        </li>
+                                        @endforeach
+                                    @else
+                                        <img src="{{asset('upload/product/'.$product_detail->photo)}}" alt="{{$product_detail->name}}" />
+                                    @endif
                                 </ul>
                             </div>
                         </div>
@@ -57,17 +52,19 @@
                                 <div class="product-info-price">
                                     <div class="price-final">
                                         <span>{{number_format($product_detail->price)}}</span>
-                                    @if($product_detail->price_old > $product_detail->price)
-                                        <span class="old-price">{{number_format($product_detail->price_old)}}</span>
-                                    @endif
+                                        @if($product_detail->price_old > $product_detail->price)
+                                            <span class="old-price">{{number_format($product_detail->price_old)}}</span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="product-add-form">
-                                    <form action="#">
+                                    <form action="{{ route('addProductToCart') }}" method="post" class="p-qty-frm">
+                                        {{ csrf_field() }}
                                         <div class="quality-button">
-                                            <input class="qty" type="number" value="1">
+                                            <input type="hidden" name="product_id" value="{{ $product_detail->id }}"> 
+                                         <input type="number" name="product_numb" min="1" class="qty" required="required" value="1">
                                         </div>
-                                        <a href="#">Thêm vào giỏ hàng</a>
+                                        <a href="javascript:;"><button type="submit" style="background: transparent; border:none">Thêm vào giỏ hàng</button></a>
                                     </form>
                                 </div>
                                 <div class="product-social-links">
@@ -95,7 +92,9 @@
                         </div>
                         <div class="tab-pane" id="Reviews">
                             <div class="valu valu-2">
-                               
+                                <div class="section-title mb-60 mt-60">
+                                    <h2>Khách hàng đánh giá</h2>
+                                </div>
                                 <div class="fb-comments" data-href="{{url('san-pham/'.$product_detail->alias.'.html')}}" data-width="100%" data-numposts="4"></div>
                             </div>
                         </div>
@@ -116,7 +115,7 @@
                                 <a href="{{url('san-pham/'.$item->alias.'.html')}}">
                                     <img src="{{asset('upload/product/'.$item->photo)}}" alt="{{$item->name}}" class="primary" />
 
-                                    <img src="img/product/2.jpg" alt="book" class="secondary" />
+                                    <img src="{{asset('public/img/product/2.jpg')}}" alt="book" class="secondary" />
 
                                 </a>
                             </div>
@@ -153,9 +152,8 @@
                         <h4>Sách liên quan</h4>
                     </div>
                     <div class="random-area mb-30">
-                        @foreach($productSameCate->chunk(3) as $productS)
                         <div class="product-active-2">
-
+                        @foreach($productSameCate->chunk(3) as $productS)
                             <div class="product-total-2">
                                 @foreach($productS as $item)
                                 <div class="single-most-product bd mb-18">
@@ -167,16 +165,17 @@
                                         <div class="product-price">
                                             <ul>
                                                 <li>{{number_format($item->price)}}</li>
-                                               
+                                                @if($item->price > $item->price_old)
+                                                <li class="old-price">{{number_format($item->price_old)}}</li>
+                                                @endif
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                                 @endforeach
                             </div>
-                             
+                        @endforeach     
                         </div>
-                        @endforeach
                     </div>
                     <div class="banner-area mb-30">
                         <div class="banner-img-2">
@@ -188,7 +187,6 @@
         </div>
     </div>
 </div>
-<!-- product-main-area-end -->
 
 
 @endsection

@@ -73,6 +73,7 @@ class IndexController extends Controller
         $menu_top = DB::table('menu')->select()->where('com', 'menu-top')->where('status', 1)->orderBy('stt', 'asc')->get();
         $dichvu = DB::table('news')->select()->where('status', 1)->where('com', 'dich-vu')->orderBy('stt', 'asc')->get();
         $cateProducts = DB::table('product_categories')->where('status', 1)->where('parent_id', 0)->where('com','san-pham')->get();
+        
         $about = DB::table('about')->select()->first();
         Cache::forever('setting', $setting);
         Cache::forever('menu_top', $menu_top);
@@ -100,6 +101,7 @@ class IndexController extends Controller
         $banner_danhmuc = DB::table('lienket')->select()->where('status', 1)->where('com', 'chuyen-muc')->where('link', 'index')->get()->first();
         $banner_sidebar = DB::table('banner_content')->where('position', 5)->get();
         $tintuc_moinhat = DB::table('news')->select()->where('status', 1)->where('com', 'tin-tuc')->orderBy('created_at', 'desc')->take(20)->get();
+        $cates = DB::table('product_categories')->where('status', 1)->where('com','san-pham')->get();
         $com = 'index';
         $hot_news = DB::table('news')->where('status', 1)->where('noibat', 1)->where('com', 'tin-tuc')->orderBy('id', 'desc')->take(3)->get();
         $cate_pro = DB::table('product_categories')->where('status', 1)->where('parent_id', 0)->orderby('id', 'asc')->get();
@@ -122,7 +124,7 @@ class IndexController extends Controller
         // End cấu hình SEO
         $img_share = asset('upload/hinhanh/' . $setting->photo);
 
-        return view('templates.index_tpl', compact('banner_danhmuc', 'com', 'khonggian_list', 'about', 'tintuc_moinhat', 'keyword', 'description', 'title', 'img_share', 'hot_news', 'news_products', 'productSalling', 'slider', 'banner_sidebar', 'cateHots', 'productNoiBat', 'cate_pro', 'productSale','feedback'));
+        return view('templates.index_tpl', compact('banner_danhmuc', 'com', 'khonggian_list', 'about', 'tintuc_moinhat', 'keyword', 'description', 'title', 'img_share', 'hot_news', 'news_products', 'productSalling', 'slider', 'banner_sidebar', 'cateHots', 'productNoiBat', 'cate_pro', 'productSale','feedback','cates'));
     }
 
     /**
@@ -221,14 +223,6 @@ class IndexController extends Controller
             return redirect()->route('getErrorNotFount');
         }
     }
-
-    public function combo()
-    {
-        $com = 'combo';
-        $combos = DB::table('products')->where('status', 1)->where('com', $com)->paginate(16);
-        return view('templates.combo', compact('combos'));
-    }
-
     public function getProductDetail($id)
     {
         $cate_pro = DB::table('product_categories')->where('status', 1)->where('parent_id', 0)->orderby('id', 'asc')->get();
@@ -903,31 +897,6 @@ class IndexController extends Controller
         return view('templates.filter_tpl', compact('result', 'theloai', 'tacgia', 'nxb'));
     }
 
-    // get ip address
-    public function getRealIPAddress()
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            //check ip from share internet
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            //to check ip is pass from proxy
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-        return $ip;
-    }
-
-    public function rating(Request $request)
-    {
-        $ip = $this->getRealIPAddress();
-        $data = new Rate;
-        $data->product_id = $request->productID;
-        $data->rate = $request->rate;
-        $data->ip_address = $ip;
-        $data->save();
-        return 1;
-    }
     public function getDetailUser($id){
         $data = Users::findOrFail($id);
         $bills = DB::table('bills')->where('user_id', \Auth::user()->id)->orderBy('id', 'desc')->take(5)->get();
@@ -1029,9 +998,25 @@ class IndexController extends Controller
         $result = $result->orderBy('id','desc')->get();
         return view('templates.searchEbook', compact('result'));    
     }
-    public function saleBooks(){
-        $products = DB::table('products')->where('spbc',1)->paginate(20);
+    public function saleBooks(Request $req){
+        $com = 'giam-gia';
+        $products = DB::table('products')->where('xuthe',1);
+
+            $appends = [];
+            $selected = $req->sort;
+            if ($req->sort) {
+                if (isset($this->sortType[$req->sort])) {
+
+                    $appends['sort'] = $req->sort;
+                    $products = $products->orderBy($this->sortType[$req->sort]['order'][0], $this->sortType[$req->sort]['order'][1]);
+                }
+            }
+            $products = $products->paginate(16);
+            if (count($appends)) {
+                $products = $products->appends($appends);
+            }
+        view()->share(['sortType' => $this->sortType]);
         $productNew = DB::table('products')->select()->where('status',1)->orderBy('stt','desc')->take(12)->get();
-        return view('templates.saleBook', compact('products','productNew'));
+        return view('templates.saleBook', compact('products','productNew','selected','com'));
     }
 }

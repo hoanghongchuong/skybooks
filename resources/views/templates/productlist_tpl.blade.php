@@ -43,15 +43,7 @@
 					<div class="left-title mb-20">
 						<h4>Giá</h4>
 					</div>
-					<div class="left-menu mb-30">
-						<ul>
-							<li><a href="#">0-20.000<span>(1)</span></a></li>
-							<li><a href="#">20.00-50.000<span>(11)</span></a></li>
-							<li><a href="#">50.00-100.000<span>(2)</span></a></li>
-							<li><a href="#">100.000-150.000<span>(3)</span></a></li>
-							<li><a href="#">150.000-and above<span>(1)</span></a></li>
-						</ul>
-					</div>
+					
 					<div class="left-title mb-20">
 						<h4>Sách ngẫu nhiên</h4>
 					</div>
@@ -84,14 +76,16 @@
 					</div>
 					<div class="banner-area mb-30">
 						<div class="banner-img-2">
-							<a href="#"><img src="{{asset('public/img/banner/31.jpg')}}" alt="banner" /></a>
+							<?php $banner = DB::table('banner_content')->where('position', 6)->get(); ?>
+							<a href="{{$banner[1]->link}}"><img src="{{asset('upload/banner/'.$banner[1]->image)}}" alt="banner" /></a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 shop">
 				<div class="category-image mb-30">
-					<a href="#"><img src="{{asset('public/img/banner/32.jpg')}}" alt="banner" /></a>
+					
+					<a href="{{$banner[0]->link}}"><img src="{{asset('upload/banner/'.$banner[0]->image)}}" alt="banner" /></a>
 				</div>
 				<div class="section-title-5 mb-30">
 					<h1>Sách</h1>

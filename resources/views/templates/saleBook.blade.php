@@ -80,7 +80,8 @@
 			</div>
 			<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 shop">
 				<div class="category-image mb-30">
-					<a href="#"><img src="{{asset('public/img/banner/32.jpg')}}" alt="banner" /></a>
+					<?php $banner = DB::table('banner_content')->where('position', 6)->first(); ?>
+					<a href="#"><img src="{{asset('upload/banner/'.$banner->image)}}" alt="banner" /></a>
 				</div>
 				<div class="section-title-5 mb-30">
 					<h1>Sách</h1>
@@ -96,11 +97,12 @@
 					</div>
 					<div class="toolbar-sorter">
 						<span>Sắp xếp</span>
-						<select id="sorter" class="sorter-options" data-role="sorter">
-							<option selected="selected" value="position"> Vị trí </option>
-							<option value="name"> Tên sản phẩm </option>
-							<option value="price"> Giá </option>
-						</select>
+						<select id="sorter" class="sorter-options sort-by" data-role="sorter">
+                            <option value="">Sắp xếp</option>
+                            @foreach($sortType as $type => $value)
+                            <option value="{{ $type }}" @if($type == $selected) {{"selected"}} @endif >{{ $value['text'] }}</option>
+                            @endforeach
+                        </select>
 						<a href="#"><i class="fa fa-arrow-up"></i></a>
 					</div>
 				</div>

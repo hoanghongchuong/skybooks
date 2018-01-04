@@ -59,7 +59,7 @@
         }
         window.token = '{{ csrf_token() }}';
         window.urlAddCart = '{{ route("addProductToCartAjax") }}';
-        window.getRate = '{{ route("rating") }}';
+        
    </script>
 
 </head>
