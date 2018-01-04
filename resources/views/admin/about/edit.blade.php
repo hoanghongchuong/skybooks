@@ -45,7 +45,7 @@
 
 								<div class="clearfix"></div>
 							
-								<div class="col-md-12 col-xs-12">
+								<!-- <div class="col-md-12 col-xs-12">
 									<div class="box box-info">
 						                <div class="box-header">                                               
 						                  	<h3 class="box-title">Mô tả</h3>
@@ -58,7 +58,7 @@
 						        			<textarea name="txtDesc" id="txtContent" cols="50" rows="5">{{ @$data->mota }}</textarea>
 						        		</div>
 						        	</div>
-								</div>
+								</div> -->
 								
 								<div class="col-md-12 col-xs-12">
 									<div class="box box-info">
